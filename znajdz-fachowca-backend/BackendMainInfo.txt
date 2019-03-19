@@ -1,0 +1,46 @@
+Entities (all implement Serializable):
+    Category:           categories are predefined
+        name - UNIQUE
+    Rate:
+        rate - int
+        description
+        raterName
+        dateOfAdd - LocalDate - mapping (?????)
+    Expert:
+        image - @Lob, String, base64
+        categories - List<Category>
+        rates - List<Rate>
+        name - UNIQUE
+        description
+        address - street + houseNumber
+        city
+        postCode
+        phoneNumber
+        email
+        isPrivatePerson
+
+Currently defined operations on entities:
+    Category:
+        getAllCategoriesNames() : List<String>
+    Rate:
+        =
+    Expert:
+        getExpertsByCityAndCategoryName(city, categoryName) : List<Expert>
+        addExpert(expert) : void; expert entity can be without proper mapping to categories and rates
+
+HTTP operations on entities (ALL REQUESTS ARE CROSS ORIGINED and mapped to /api):
+    Category:
+        /categories GET - List<String> with categories' names
+    Rate:
+        ----
+    Expert:
+         /expert GET; query string: city=CITY_NAME, category=CATEGORY_NAME - List<Expert> by CITY_NAME and CATEGORY_NAME
+         /expert POST; expert in request's body - adds expert
+
+All RuntimeException based exceptions
+    are automatically converted to 404 HTTP status code and exception's message is sent in body of response.
+All correctly ended requests are responsed with 200 HTTP status code and properly body of response.
+
+Global algorithm for handling AJAX responses:
+    OK (200) -> make standard use of response's data
+    ERROR (=/= 200, probably 404) -> display text (at for example dismissable alert) from response's body
